@@ -1,0 +1,88 @@
+
+
+{block content}
+<div class="container">
+   
+    <div class="row">
+        <div class="col-6">
+            <h1>Výpis poptávek</h1>
+        </div>
+        <div class="col-6 d-flex align-items-center justify-content-end">
+            <form n:name=searchForm method="GET">
+                <select n:name="sortCol" class="form-select form-select"></select>
+                <input n:name="searchField" type="text" class="form-control form-control" >
+            </form>
+        </div>
+      </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"><a n:href="order! id">id</a></th>
+            <th scope="col"><a n:href="order! message">Popis poptávky</a></th>
+            <th scope="col"><a n:href="order! address">Adresa</a></th>
+            <th scope="col"><a n:href="order! services">Poptávající služby</a></th>
+            <th scope="col"><a n:href="order! importance">Důležitost</a></th>
+            <th scope="col"><a n:href="order! pet">Mazlíček</a></th>
+            <th scope="col"><a n:href="order! cost">Odměna</a></th>
+            <th scope="col"><a n:href="order! created_at">Vytvořeno</a></th>
+          </tr>
+    </thead>
+    <tbody>
+
+
+    {foreach $posts as $post}
+        <tr>
+            <th scope="row">{$post->id}</th>
+            <td>{$post->message}</td>
+            <td>{$post->address} {$post->city}</td>
+            <td>{$post->services}</td>
+            <td>{$post->importance}</td>
+            <td>{$post->pet}</td>
+            <td>{$post->cost}</td>
+            <td>{$post->created_at|date:'F j, Y'}</td>
+            <td><button class="btn btn-success">Beru!</button></td>
+        </tr>
+        
+        {/foreach}
+    </tbody>
+</table>
+<div class="pagination">
+	{if !$paginator->isFirst()}
+        {if isset($sortCol)}
+            <a n:href="default, 'page' => 1,$sortOrder,'sortCol' => $sortCol,'searchField' => $searchField">První</a>
+            &nbsp;|&nbsp;
+            <a n:href="default, $paginator->page-1,$sortOrder,'sortCol' => $sortCol,'searchField' => $searchField">Předchozí</a>
+            &nbsp;|&nbsp;
+        {/if}
+        {if !isset($sortCol)}
+		<a n:href="default, 1,$sortOrder">První</a>
+		&nbsp;|&nbsp;
+		<a n:href="default, $paginator->page-1,$sortOrder">Předchozí</a>
+		&nbsp;|&nbsp;
+        {/if}
+	{/if}
+    
+
+	Stránka {$paginator->getPage()} z {$paginator->getPageCount()}
+
+	{if !$paginator->isLast()}
+        {if isset($sortCol)}
+            &nbsp;|&nbsp;
+            <a n:href="default, $paginator->getPage() + 1,$sortOrder,'sortCol' => $sortCol,'searchField' => $searchField">Další</a>
+            &nbsp;|&nbsp;
+            <a n:href="default, $paginator->getPageCount(),$sortOrder,'sortCol' => $sortCol,'searchField' => $searchField">Poslední</a>
+        {/if}
+
+		{if !isset($sortCol)}
+            &nbsp;|&nbsp;
+            <a n:href="default, $paginator->getPage() + 1,$sortOrder">Další</a>
+            &nbsp;|&nbsp;
+            <a n:href="default, $paginator->getPageCount(),$sortOrder">Poslední</a>
+        {/if}
+	{/if}
+</div>
+
+<a class="btn btn-success" href="/post">Vytvořit poptávku</a>
+</div>
+
+{/block}
